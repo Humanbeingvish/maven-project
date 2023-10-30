@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+ 
+    tools {
+        maven "MAVEN_HOME"
+    }
+ 
+    stages {
+        stage('stage 1 - Checkout Code') {
+            steps {
+                git branch: 'main', credentialsId: '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', url: 'https://github.com/Humanbeingvish/maven-project.git'
+            }
+        }
+ 
+        stage('stage 2 - Compile Code') {
+            steps {
+                // Use 'mvn compile' to compile the code
+                bat "mvn compile"
+            }
+        }
+        stage('stage 3 - Run Unit Tests') {
+            steps {
+                // Use 'mvn test' to run unit tests
+                bat "mvn test"
+            }
+        }
+        stage('stage 4 - Create Build') {
+            steps {
+                // Use 'mvn package' to create a build
+                bat "mvn package"
+            }
+        }
+    }
+ 
+    post {
+        always {
+            // This stage will run regardless of the build result
+            echo "This will always run"
+        }
+ 
+        success {
+            // This stage will run only if the build is successful
+            echo "Build succeeded"
+        }
+ 
+    }
+}
